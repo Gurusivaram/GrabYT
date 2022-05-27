@@ -24,6 +24,7 @@ object GrabYT {
             val jsonObject = JSONObject()
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
+                Log.d(this.javaClass.name, "Unexpcted Error ${e.message}")
                 jsonObject.put("error", e.message)
                 listener(jsonObject)
             }
@@ -56,14 +57,25 @@ object GrabYT {
                         Regex("""(?<= subscribers"\}\},"simpleText":")(.*)(?= subscribers"\},"trackingParams":")""")
                     val subscribersCount = subscribersCountRegex.find(htmlContentInString)?.value
 
-                    jsonObject.put("title", videoTitle)
-                    jsonObject.put("views", videoViewCount)
-                    jsonObject.put("channel_name", channelName)
-                    jsonObject.put("channel_subscribers", subscribersCount)
+                    val videoNotFoundRegex =
+                        Regex("""(?<=\[\{"backgroundPromoRenderer":\{"title":\{"runs":\[\{"text":")(.*)(?= any more"\}\]\},"trackingParams":")""")
+                    val videoNotFound = videoNotFoundRegex.find(htmlContentInString)?.value
 
-                    Log.d(this.javaClass.name, jsonObject.toString())
+                    Log.d(this.javaClass.name, videoNotFound.toString())
+                    if(videoNotFound != null && videoNotFound.toString().isNotEmpty()) {
+                        Log.d(this.javaClass.name, videoNotFound)
+                        jsonObject.put("error", videoNotFound)
+                        listener(jsonObject)
+                    } else {
+                        jsonObject.put("title", videoTitle)
+                        jsonObject.put("views", videoViewCount)
+                        jsonObject.put("channel_name", channelName)
+                        jsonObject.put("channel_subscribers", subscribersCount)
 
-                    listener(jsonObject)
+                        Log.d(this.javaClass.name, jsonObject.toString())
+
+                        listener(jsonObject)
+                    }
                 }
             }
         })

@@ -2,6 +2,7 @@ package com.example.grabyt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.grabyt.databinding.ActivityMainBinding
 import com.example.grabytdata.GrabYT
 
@@ -14,10 +15,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        GrabYT.grab("kJQP7kiw5Fk") {
+        GrabYT.grab("video id goes here") {
             runOnUiThread {
                 binding.tvJsonResult.text = it.toString()
-                println("video Data --> $it")
+                Log.d("Video Data",it.toString())
             }
         }
     }

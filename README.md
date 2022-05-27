@@ -19,7 +19,7 @@ Gradle
 dependencies {
     ...
     //GrabYT library
-    implementation 'com.github.Gurusivaram:GrabYT:1.0.1'
+    implementation 'com.github.Gurusivaram:GrabYT:1.0.2'
 }
 ```
 
